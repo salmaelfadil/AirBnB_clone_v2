@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" new class for sqlAlchemy """
+""" db storage as  sqlAlchemy """
 from os import getenv
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy import (create_engine)
@@ -14,17 +14,17 @@ from models.amenity import Amenity
 
 
 class DBStorage:
-    """ create tables in environmental"""
+    """ create db storage """
     __engine = None
     __session = None
 
     def __init__(self):
+        """ init method """
         user = getenv("HBNB_MYSQL_USER")
         passwd = getenv("HBNB_MYSQL_PWD")
         db = getenv("HBNB_MYSQL_DB")
         host = getenv("HBNB_MYSQL_HOST")
         env = getenv("HBNB_ENV")
-
         self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'
                                       .format(user, passwd, host, db),
                                       pool_pre_ping=True)
@@ -33,9 +33,8 @@ class DBStorage:
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
-        """returns a dictionary
-        Return:
-            returns a dictionary of __object
+        """
+        returns  dict
         """
         dic = {}
         if cls:
@@ -55,23 +54,27 @@ class DBStorage:
         return (dic)
 
     def new(self, obj):
-        """add a new element in the table
+        """
+        add a new instance
         """
         self.__session.add(obj)
 
     def save(self):
-        """save changes
+        """
+        save and commit session
         """
         self.__session.commit()
 
     def delete(self, obj=None):
-        """delete an element in the table
+        """
+        delete element in the table
         """
         if obj:
             self.session.delete(obj)
 
     def reload(self):
-        """configuration
+        """
+        reload method
         """
         Base.metadata.create_all(self.__engine)
         sec = sessionmaker(bind=self.__engine, expire_on_commit=False)
@@ -79,6 +82,7 @@ class DBStorage:
         self.__session = Session()
 
     def close(self):
-        """ calls remove()
+        """
+        close sesiion
         """
         self.__session.close()
