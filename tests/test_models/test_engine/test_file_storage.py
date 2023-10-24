@@ -19,7 +19,8 @@ class TestFileStorage(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        """FileStorage testing setup.
+        """
+        FileStorage test setup.
         """
         try:
             os.rename("file.json", "tmp")
@@ -51,10 +52,8 @@ class TestFileStorage(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        """FileStorage testing teardown.
-
-        Restore original file.json.
-        Delete all test class instances.
+        """
+        fileStorage testing teardown.
         """
         try:
             os.remove("file.json")
@@ -74,7 +73,7 @@ class TestFileStorage(unittest.TestCase):
         del cls.review
 
     def test_docstrings(self):
-        """Check for docstrings."""
+        """test  docstrings."""
         self.assertIsNotNone(FileStorage.__doc__)
         self.assertIsNotNone(FileStorage.all.__doc__)
         self.assertIsNotNone(FileStorage.new.__doc__)
@@ -82,37 +81,37 @@ class TestFileStorage(unittest.TestCase):
         self.assertIsNotNone(FileStorage.delete.__doc__)
 
     def test_attributes(self):
-        """Check for attributes."""
+        """test attributes."""
         self.assertEqual(str, type(FileStorage._FileStorage__file_path))
         self.assertEqual(dict, type(FileStorage._FileStorage__objects))
 
     def test_methods(self):
-        """Check for methods."""
+        """test  methods"""
         self.assertTrue(hasattr(FileStorage, "all"))
         self.assertTrue(hasattr(FileStorage, "new"))
         self.assertTrue(hasattr(FileStorage, "reload"))
         self.assertTrue(hasattr(FileStorage, "delete"))
 
     def test_init(self):
-        """Test initialization."""
+        """test init method"""
         self.assertTrue(isinstance(self.storage, FileStorage))
 
     def test_all(self):
-        """Test default all method."""
+        """test all method"""
         obj = self.storage.all()
         self.assertEqual(type(obj), dict)
         self.assertIs(obj, FileStorage._FileStorage__objects)
         self.assertEqual(len(obj), 7)
 
     def test_all_cls(self):
-        """Test all method with specified cls."""
+        """test all method 2"""
         obj = self.storage.all(BaseModel)
         self.assertEqual(type(obj), dict)
         self.assertEqual(len(obj), 1)
         self.assertEqual(self.base, list(obj.values())[0])
 
     def test_new(self):
-        """Test new method."""
+        """test new method"""
         bm = BaseModel()
         self.storage.new(bm)
         store = FileStorage._FileStorage__objects
@@ -120,7 +119,7 @@ class TestFileStorage(unittest.TestCase):
         self.assertIn(self.base, store.values())
 
     def test_save(self):
-        """Test save method."""
+        """test save method"""
         self.storage.save()
         with open("file.json", "r", encoding="utf-8") as f:
             save_text = f.read()
@@ -133,7 +132,7 @@ class TestFileStorage(unittest.TestCase):
             self.assertIn("Review." + self.review.id, save_text)
 
     def test_reload(self):
-        """Test reload method."""
+        """test reload method"""
         bm = BaseModel()
         with open("file.json", "w", encoding="utf-8") as f:
             key = "{}.{}".format(type(bm).__name__, bm.id)
@@ -143,14 +142,14 @@ class TestFileStorage(unittest.TestCase):
         self.assertIn("BaseModel." + bm.id, store)
 
     def test_reload_no_file(self):
-        """Test reload method with no existing file.json."""
+        """test reload method with no  file.json."""
         try:
             self.storage.reload()
         except Exception:
             self.fail
 
     def test_delete(self):
-        """Test delete method."""
+        """test delete"""
         bm = BaseModel()
         key = "{}.{}".format(type(bm).__name__, bm.id)
         FileStorage._FileStorage__objects[key] = bm
@@ -158,7 +157,7 @@ class TestFileStorage(unittest.TestCase):
         self.assertNotIn(bm, FileStorage._FileStorage__objects)
 
     def test_delete_nonexistant(self):
-        """Test delete method with a nonexistent object."""
+        """test delete function2"""
         try:
             self.storage.delete(BaseModel())
         except Exception:

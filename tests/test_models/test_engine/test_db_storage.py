@@ -51,10 +51,8 @@ class TestDBStorage(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        """DBStorage testing teardown.
-
-        Delete all instantiated test classes.
-        Clear DBStorage session.
+        """
+        DBStorage test teardown.
         """
         if type(models.storage) == DBStorage:
             cls.storage._DBStorage__session.delete(cls.state)
@@ -72,7 +70,7 @@ class TestDBStorage(unittest.TestCase):
             del cls.storage
 
     def test_docstrings(self):
-        """Check for docstrings."""
+        """test docstrings."""
         self.assertIsNotNone(DBStorage.__doc__)
         self.assertIsNotNone(DBStorage.all.__doc__)
         self.assertIsNotNone(DBStorage.new.__doc__)
@@ -83,12 +81,12 @@ class TestDBStorage(unittest.TestCase):
     @unittest.skipIf(type(models.storage) == FileStorage,
                      "Testing FileStorage")
     def test_attributes(self):
-        """Check for attributes."""
+        """test attributes."""
         self.assertTrue(isinstance(self.storage._DBStorage__engine, Engine))
         self.assertTrue(isinstance(self.storage._DBStorage__session, Session))
 
     def test_methods(self):
-        """Check for methods."""
+        """ test methods."""
         self.assertTrue(hasattr(DBStorage, "__init__"))
         self.assertTrue(hasattr(DBStorage, "all"))
         self.assertTrue(hasattr(DBStorage, "new"))
@@ -99,13 +97,13 @@ class TestDBStorage(unittest.TestCase):
     @unittest.skipIf(type(models.storage) == FileStorage,
                      "Testing FileStorage")
     def test_init(self):
-        """Test initialization."""
+        """test init method """
         self.assertTrue(isinstance(self.storage, DBStorage))
 
     @unittest.skipIf(type(models.storage) == FileStorage,
                      "Testing FileStorage")
     def test_all(self):
-        """Test default all method."""
+        """test all method."""
         obj = self.storage.all()
         self.assertEqual(type(obj), dict)
         self.assertEqual(len(obj), 6)
@@ -113,7 +111,7 @@ class TestDBStorage(unittest.TestCase):
     @unittest.skipIf(type(models.storage) == FileStorage,
                      "Testing FileStorage")
     def test_all_cls(self):
-        """Test all method with specified cls."""
+        """test all method"""
         obj = self.storage.all(State)
         self.assertEqual(type(obj), dict)
         self.assertEqual(len(obj), 1)
@@ -122,7 +120,7 @@ class TestDBStorage(unittest.TestCase):
     @unittest.skipIf(type(models.storage) == FileStorage,
                      "Testing FileStorage")
     def test_new(self):
-        """Test new method."""
+        """test new method"""
         st = State(name="Washington")
         self.storage.new(st)
         store = list(self.storage._DBStorage__session.new)
@@ -131,15 +129,15 @@ class TestDBStorage(unittest.TestCase):
     @unittest.skipIf(type(models.storage) == FileStorage,
                      "Testing FileStorage")
     def test_save(self):
-        """Test save method."""
-        st = State(name="Virginia")
+        """test save method"""
+        st = State(name="Minia")
         self.storage._DBStorage__session.add(st)
         self.storage.save()
         db = MySQLdb.connect(user="hbnb_test",
                              passwd="hbnb_test_pwd",
                              db="hbnb_test_db")
         cursor = db.cursor()
-        cursor.execute("SELECT * FROM states WHERE BINARY name = 'Virginia'")
+        cursor.execute("SELECT * FROM states WHERE BINARY name = 'Minia'")
         query = cursor.fetchall()
         self.assertEqual(1, len(query))
         self.assertEqual(st.id, query[0][0])
