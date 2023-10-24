@@ -19,7 +19,8 @@ class TestState(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        """State testing setup.
+        """
+        State test setup.
         """
         try:
             os.rename("file.json", "tmp")
@@ -38,7 +39,8 @@ class TestState(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        """State testing teardown.
+        """
+        State teardown.
         """
         try:
             os.remove("file.json")
@@ -56,11 +58,11 @@ class TestState(unittest.TestCase):
             del cls.dbstorage
 
     def test_docstrings(self):
-        """Check for docstrings."""
+        """docstrings."""
         self.assertIsNotNone(State.__doc__)
 
     def test_attributes(self):
-        """Check for attributes."""
+        """test attributes."""
         st = State()
         self.assertEqual(str, type(st.id))
         self.assertEqual(datetime, type(st.created_at))
@@ -70,7 +72,7 @@ class TestState(unittest.TestCase):
     @unittest.skipIf(type(models.storage) == FileStorage,
                      "Testing FileStorage")
     def test_nullable_attributes(self):
-        """Check that relevant DBStorage attributes are non-nullable."""
+        """test attributes"""
         with self.assertRaises(OperationalError):
             self.dbstorage._DBStorage__session.add(State())
             self.dbstorage._DBStorage__session.commit()
@@ -79,7 +81,7 @@ class TestState(unittest.TestCase):
     @unittest.skipIf(type(models.storage) == DBStorage,
                      "Testing DBStorage")
     def test_cities(self):
-        """Test reviews attribute."""
+        """Test review."""
         key = "{}.{}".format(type(self.city).__name__, self.city.id)
         self.filestorage._FileStorage__objects[key] = self.city
         cities = self.state.cities
@@ -87,22 +89,22 @@ class TestState(unittest.TestCase):
         self.assertIn(self.city, cities)
 
     def test_is_subclass(self):
-        """Check that State is a subclass of BaseModel."""
+        """test if State is a subclass of BaseModel."""
         self.assertTrue(issubclass(State, BaseModel))
 
     def test_init(self):
-        """Test initialization."""
+        """Test init method"""
         self.assertIsInstance(self.state, State)
 
     def test_two_models_are_unique(self):
-        """Test that different State instances are unique."""
+        """Test  different State instances"""
         st = State()
         self.assertNotEqual(self.state.id, st.id)
         self.assertLess(self.state.created_at, st.created_at)
         self.assertLess(self.state.updated_at, st.updated_at)
 
     def test_str(self):
-        """Test __str__ representation."""
+        """Test __str_"""
         s = self.state.__str__()
         self.assertIn("[State] ({})".format(self.state.id), s)
         self.assertIn("'id': '{}'".format(self.state.id), s)
@@ -115,7 +117,7 @@ class TestState(unittest.TestCase):
     @unittest.skipIf(type(models.storage) == DBStorage,
                      "Testing DBStorage")
     def test_save_filestorage(self):
-        """Test save method with FileStorage."""
+        """test save method wis file storage."""
         old = self.state.updated_at
         self.state.save()
         self.assertLess(old, self.state.updated_at)
@@ -143,7 +145,7 @@ class TestState(unittest.TestCase):
         cursor.close()
 
     def test_to_dict(self):
-        """Test to_dict method."""
+        """test to_dict method."""
         state_dict = self.state.to_dict()
         self.assertEqual(dict, type(state_dict))
         self.assertEqual(self.state.id, state_dict["id"])

@@ -6,6 +6,7 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 
+
 class City(BaseModel, Base):
     """ updated city class"""
     __tablename__ = "cities"

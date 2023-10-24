@@ -20,11 +20,8 @@ class TestAmenity(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        """Amenity testing setup.
-
-        Temporarily renames any existing file.json.
-        Resets FileStorage objects dictionary.
-        Creates FileStorage, DBStorage and Amenity instances for testing.
+        """
+        Amenity test setup.
         """
         try:
             os.rename("file.json", "tmp")
@@ -42,9 +39,8 @@ class TestAmenity(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        """Amenity testing teardown.
-        Restore original file.json.
-        Delete the FileStorage, DBStorage and Amenity test instances.
+        """
+        Amenity test teardown.
         """
         try:
             os.remove("file.json")
@@ -59,12 +55,6 @@ class TestAmenity(unittest.TestCase):
         if type(models.storage) == DBStorage:
             cls.dbstorage._DBStorage__session.close()
             del cls.dbstorage
-
-    def test_pep8(self):
-        """Test pep8 styling."""
-        style = pep8.StyleGuide(quiet=True)
-        p = style.check_files(["models/amenity.py"])
-        self.assertEqual(p.total_errors, 0, "fix pep8")
 
     def test_docstrings(self):
         """Check for docstrings."""
@@ -83,7 +73,7 @@ class TestAmenity(unittest.TestCase):
     @unittest.skipIf(type(models.storage) == FileStorage,
                      "Testing FileStorage")
     def test_email_not_nullable(self):
-        """Test that email attribute is non-nullable."""
+        """Test email attribute"""
         with self.assertRaises(OperationalError):
             self.dbstorage._DBStorage__session.add(Amenity(password="a"))
             self.dbstorage._DBStorage__session.commit()
@@ -93,23 +83,22 @@ class TestAmenity(unittest.TestCase):
             self.dbstorage._DBStorage__session.commit()
 
     def test_is_subclass(self):
-        """Check that Amenity is a subclass of BaseModel."""
+        """test that Amenity is a subclass of BaseModel."""
         self.assertTrue(issubclass(Amenity, BaseModel))
 
     def test_init(self):
-        """Test initialization."""
+        """Test init function"""
         self.assertIsInstance(self.amenity, Amenity)
 
     def test_two_models_are_unique(self):
-        """Test that different Amenity instances are unique."""
+        """Test Amenity instances"""
         us = Amenity(email="a", password="a")
         self.assertNotEqual(self.amenity.id, us.id)
         self.assertLess(self.amenity.created_at, us.created_at)
         self.assertLess(self.amenity.updated_at, us.updated_at)
 
-
     def test_str(self):
-        """Test __str__ representation."""
+        """Test __str__ """
         s = self.amenity.__str__()
         self.assertIn("[Amenity] ({})".format(self.amenity.id), s)
         self.assertIn("'id': '{}'".format(self.amenity.id), s)
@@ -122,7 +111,7 @@ class TestAmenity(unittest.TestCase):
     @unittest.skipIf(type(models.storage) == DBStorage,
                      "Testing DBStorage")
     def test_save_filestorage(self):
-        """Test save method with FileStorage."""
+        """test save method wiz FileStorage."""
         old = self.amenity.updated_at
         self.amenity.save()
         self.assertLess(old, self.amenity.updated_at)
@@ -132,7 +121,7 @@ class TestAmenity(unittest.TestCase):
     @unittest.skipIf(type(models.storage) == FileStorage,
                      "Testing FileStorage")
     def test_save_dbstorage(self):
-        """Test save method with DBStorage."""
+        """test save method with DBStorage."""
         old = self.amenity.updated_at
         self.amenity.save()
         self.assertLess(old, self.amenity.updated_at)

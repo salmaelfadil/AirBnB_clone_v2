@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """Defines unnittests for models/user.py."""
 import os
-import pep8
 import models
 import MySQLdb
 import unittest

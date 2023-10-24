@@ -18,7 +18,7 @@ class HBNBCommand(cmd.Cmd):
 
     prompt = "(hbnb) "
     __classes = {
-        "BaseModel", "User", "State", "City", "Amenity","Place","Review"
+        "BaseModel", "User", "State", "City", "Amenity", "Place", "Review"
     }
 
     def emptyline(self):
@@ -61,7 +61,6 @@ class HBNBCommand(cmd.Cmd):
                 storage.new(obj)
             print(obj.id)
             obj.save()
-
         except SyntaxError:
             print("** class name missing **")
         except NameError:
