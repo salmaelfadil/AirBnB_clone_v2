@@ -10,17 +10,6 @@ env.hosts = ["34.207.188.239", "54.174.238.110"]
 
 def do_deploy(archive_path):
     """
-    2. Deploy archive!
-    """
-    from datetime import datetime
-from fabric.api import local, put, run, env
-import os.path
-
-env.hosts = ['35.196.31.36', '35.237.103.48']
-
-
-def do_deploy(archive_path):
-    """
     deploy web servers
     """
     if os.path.exists(archive_path) is False:
