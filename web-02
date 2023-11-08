@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+#web02 connect
+ssh -i ~/.ssh/id_rsa ubuntu@54.174.238.110
