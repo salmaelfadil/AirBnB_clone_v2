@@ -7,24 +7,37 @@ from fabric.api import run
 
 env.hosts = ["34.207.188.239", "54.174.238.110"]
 
-
 def do_deploy(archive_path):
     """
-    deploy web servers
+    deploys archive to a web server.
     """
-    if os.path.exists(archive_path) is False:
+    if os.path.isfile(archive_path) is False:
         return False
-    arch_name = archive_path.split('/')[1]
-    arch_name_nex = arch_name.split(".")[0]
-    re_path = "/data/web_static/releases/" + arch_name_nex
-    up_path = '/tmp/' + arch_name
-    put(archive_path, up_path)
-    run('mkdir -p ' + re_path)
-    run('tar -xzf /tmp/{} -C {}/'.format(arch_name, re_path))
-    run('rm {}'.format(up_path))
-    mv = 'mv ' + re_path + '/web_static/* ' + re_path + '/'
-    run(mv)
-    run('rm -rf ' + re_path + '/web_static')
-    run('rm -rf /data/web_static/current')
-    run('ln -s ' + re_path + ' /data/web_static/current')
+    file = archive_path.split("/")[-1]
+    name = file.split(".")[0]
+
+    if put(archive_path, "/tmp/{}".format(file)).failed is True:
+        return False
+    if run("rm -rf /data/web_static/releases/{}/".
+           format(name)).failed is True:
+        return False
+    if run("mkdir -p /data/web_static/releases/{}/".
+           format(name)).failed is True:
+        return False
+    if run("tar -xzf /tmp/{} -C /data/web_static/releases/{}/".
+           format(file, name)).failed is True:
+        return False
+    if run("rm /tmp/{}".format(file)).failed is True:
+        return False
+    if run("mv /data/web_static/releases/{}/web_static/* "
+           "/data/web_static/releases/{}/".format(name, name)).failed is True:
+        return False
+    if run("rm -rf /data/web_static/releases/{}/web_static".
+           format(name)).failed is True:
+        return False
+    if run("rm -rf /data/web_static/current").failed is True:
+        return False
+    if run("ln -s /data/web_static/releases/{}/ /data/web_static/current".
+           format(name)).failed is True:
+        return False
     return True
