@@ -1,16 +1,16 @@
 #!/usr/bin/python3
-# deploy fabfile and distribute archive to web servers.
+# distributes an archive to your web servers
 import os.path
 from fabric.api import env
 from fabric.api import put
 from fabric.api import run
 
-env.hosts = ["34.207.188.239", "54.174.238.110"]
+env.hosts = ["54.145.85.75", "100.25.145.243"]
 
 
 def do_deploy(archive_path):
     """
-    deploys archive to a web server.
+    distributes an archive to webservers
     """
     if os.path.isfile(archive_path) is False:
         return False
