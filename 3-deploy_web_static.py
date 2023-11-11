@@ -32,7 +32,7 @@ def do_deploy(archive_path):
         run("mkdir -p {}".format(folder))
         run("tar -xzf /tmp/{} -C {}".format(file, folder))
         run("rm /tmp/{}".format(file))
-        run("mv {}/web_static/* {}/".format(folder, folder))
+        run("rsync -a {}/web_static/ {}/".format(folder, folder))
         run("rm -rf {}/web_static".format(folder))
         run('rm -rf /data/web_static/current')
         run("ln -s {} /data/web_static/current".format(folder))
