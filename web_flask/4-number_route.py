@@ -25,11 +25,16 @@ def c_is_fun(text):
     return "C {}".format(text.replace('_', ' '))
 
 
-@app.route('/python')
 @app.route("/python/<text>")
 def python_is_cool(text='is cool'):
     """Prints a statement on webpage"""
     return "Python {}".format(text.replace('_', ' '))
+
+
+@app.route("/number/<int:n>")
+def number_n(n):
+    """Prints a statement on webpage"""
+    return "{:d} is a number".format(n)
 
 
 if __name__ == '__main__':
