@@ -20,7 +20,7 @@ def hbnb_page():
 
 
 @app.route("/c/<text>")
-def hbnb_page():
+def c_is_fun(text):
     """Prints a statement on webpage"""
     return "C {}".format(text.replace('_', ' '))
 
