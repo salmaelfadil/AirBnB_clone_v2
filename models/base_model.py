@@ -11,33 +11,32 @@ from sqlalchemy import Integer
 
 Base = declarative_base()
 
-timestamp_format = "%Y-%m-%d %H:%M:%S"
 
 class BaseModel:
     """A base class for all hbnb models"""
     id = Column(String(60), primary_key=True, nullable=False)
-    created_at = Column(DateTime, nullable=False, default=datetime.utcnow().strftime(timestamp_format))
-    updated_at = Column(DateTime, nullable=False, default=datetime.utcnow().strftime(timestamp_format))
+    created_at = Column(DateTime, nullable=False, default=datetime.utcnow())
+    updated_at = Column(DateTime, nullable=False, default=datetime.utcnow())
 
     def __init__(self, *args, **kwargs):
         """Instatntiates a new model"""
         if not kwargs:
             self.id = str(uuid.uuid4())
-            self.created_at = datetime.utcnow().strftime(timestamp_format)
-            self.updated_at = datetime.utcnow().strftime(timestamp_format)
+            self.created_at = datetime.now()
+            self.updated_at = datetime.now()
         else:
             for key, value in kwargs.items():
                 if key != '__class__':
                     if key in ('created_at', 'updated_at'):
-                        setattr(self, key, datetime.fromisoformat(value) if isinstance(value, str) else value)
+                        setattr(self, key, datetime.fromisoformat(value))
                     else:
                         setattr(self, key, value)
             if not hasattr(kwargs, 'id'):
                 setattr(self, 'id', str(uuid.uuid4()))
             if not hasattr(kwargs, 'created_at'):
-                setattr(self, 'created_at', datetime.utcnow()).strftime(timestamp_format)
+                setattr(self, 'created_at', datetime.now())
             if not hasattr(kwargs, 'updated_at'):
-                setattr(self, 'updated_at', datetime.utcnow()).strftime(timestamp_format)
+                setattr(self, 'updated_at', datetime.now())
 
     def __str__(self):
         """Returns a string representation of the instance"""
@@ -53,7 +52,7 @@ class BaseModel:
     def save(self):
         """Updates updated_at with current time when instance is changed"""
         from models import storage
-        self.updated_at = datetime.utcnow().strftime(timestamp_format)
+        self.updated_at = datetime.now()
         models.storage.new(self)
         models.storage.save()
 
