@@ -4,9 +4,11 @@ Start a Flask application
 """
 from flask import Flask, render_template
 from models import storage
-from models import *
+from models.state import State
+
 app = Flask(__name__)
 app.url_map.strict_slashes = False
+storage.all()
 
 
 @app.teardown_appcontext
@@ -18,8 +20,9 @@ def close_db(exc):
 @app.route('/cities_by_states')
 def cities_list():
     """returns a list of all state objects"""
-    states = storage.all(State).values()
+    states = storage.all(State)
     return render_template("8-cities_by_states.html", states=states)
+
 
 
 if __name__ == "__main__":
