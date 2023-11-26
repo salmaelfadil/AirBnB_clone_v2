@@ -16,8 +16,8 @@ def close_db(exc):
     storage.close()
 
 
-@app.route('/states_list')
-def states_list():
+@app.route('/cities_by_states')
+def cities_list():
     """returns a list of all state objects"""
     states = storage.all(State).values()
     return render_template("'8-cities_by_states.html", states=states)
